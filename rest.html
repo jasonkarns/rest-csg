@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>A RESTful Primer</title>
+
+  <meta name="generator" content="S5" />
+  <meta name="version" content="S5 1.1" />
+  <meta name="theme" content="Glossdeck" />
+  <meta name="presdate" content="20080805" />
+  <meta name="author" content="Jason Karns" />
+  <meta name="company" content="Cardinal Solutions Group" />
+
+  <!-- configuration parameters -->
+  <meta name="defaultView" content="slideshow" />
+  <meta name="controlVis" content="hidden" />
+
+  <link rel="stylesheet" href="ui/glossdeck/slides.css" type="text/css" media="projection" id="slideProj" />
+  <link rel="stylesheet" href="ui/glossdeck/outline.css" type="text/css" media="screen" id="outlineStyle" />
+  <link rel="stylesheet" href="ui/glossdeck/print.css" type="text/css" media="print" id="slidePrint" />
+  <link rel="stylesheet" href="ui/glossdeck/opera.css" type="text/css" media="projection" id="operaFix" />
+
+  <script src="ui/glossdeck/slides.js" type="text/javascript"></script>
+  <style type="text/css">
+      .slide h1 {margin:0; padding:0;}
+      p {text-align:center;}
+      .slide code {color:gray;}
+  </style>
+</head>
+<body>
+
+  <div class="layout">
+    <div id="controls"><!--     don't delete me --></div>
+    <div id="currentSlide"><!-- don't delete me --></div>
+    <div id="header"></div>
+    <div id="footer">
+        <h1><acronym title="Enterprise Microsoft Solutions">EMS</acronym> Practice meeting | August 05, 2008</h1>
+        <h2>A <abbr title="Representational State Transfer">REST</abbr>ful Primer</h2>
+    </div>
+  </div>
+
+<!-- start presentation -->
+<ol class="presentation xoxo">
+
+  <li class="slide vcard">
+    <h1><abbr title="Representational State Transfer">REST</abbr></h1>
+    <h2>&amp; the Web</h2>
+    <h3 class="fn">Jason Karns</h3>
+    <h4><span class="title">Consultant</span>, <a href="http://cardinalsolutions.com" class="url org">Cardinal Solutions Group</a></h4>
+  </li>
+
+  <li class="slide">
+    <h1>What is <abbr title="Representational State Transfer">REST</abbr>?</h1>
+    <p>Representational State Transfer</p>
+    <div class="handout"></div>
+  </li>
+
+  <li class="slide">
+    <h1>What is <abbr title="Representational State Transfer">REST</abbr>?</h1>
+    <ul>
+        <li><abbr title="Representational State Transfer">REST</abbr> is an architectural <em>style</em></li>
+        <li><abbr title="Representational State Transfer">REST</abbr> is <em>any</em> architecture following key principles</li>
+        <li><acronym title="Hyper-Text Transfer Protocol">HTTP</acronym> is a <abbr title="Representational State Transfer">REST</abbr>ful protocol</li>
+    </ul>
+    <div class="handout">
+        <abbr title="Representational State Transfer">REST</abbr> vs <acronym title="Simple Object Access Protocol">SOAP</acronym>
+    </div>
+  </li>
+
+  <li class="slide">
+    <h1>Principles</h1>
+    <ul>
+        <li>resources</li>
+        <li>id's</li>
+        <li>interface
+            <ul>
+                <li>uniform operations</li>
+                <li>media-types</li>
+            </ul>
+        </li>
+        <li>stateless
+            <ul>
+                <li>cacheable</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="handout"></div>
+  </li>
+
+  <li class="slide">
+    <h1>The <acronym title="World Wide Web">WWW</acronym> is <abbr title="Representational State Transfer">REST</abbr>ful!</h1>
+    <ul class="incremental">
+        <li><acronym title="Hyper-Text Transfer Protocol">HTTP</acronym> - stateless; uniform operations</li>
+        <li><acronym title="Domain Name System">DNS</acronym> - unique addressing</li>
+        <li><acronym title="Hyper-Text Markup Language">HTML</acronym> - media-types; resources</li>
+    </ul>
+    <div class="handout"></div>
+  </li>
+
+  <li class="slide">
+    <h1>Food for Thought...</h1>
+    <p>What if the Web was built using <acronym title="eXtensible Markup Language">XML</acronym>-<acronym title="Remote Procedure Call">RPC</acronym>, <acronym title="Simple Object Access Protocol">SOAP</acronym>, or <acronym title="Common Object Request Broker Architecture">CORBA</acronym>?</p>
+    <div class="handout">Barrier to entry would be high. Each site would needs it's own 'client'. Would perhaps have 'richer' data (meta-information) and be closer to Semantic Web. But RDF and microformats are pushing us their now.</div>
+  </li>
+
+  <li class="slide">
+    <h1>Everything's a Thing</h1>
+    <p>What is a resource?</p>
+    <div class="handout">
+        <p>thing, person, order, product, shopping cart, list, group, set, process</p>
+        <p>how many of us have written entire websites that are one page?</p>
+    </div>
+  </li>
+
+  <li class="slide">
+    <h1>ID</h1>
+    <h2><acronym title="Uniform Resource Identifier">URI</acronym>/<acronym title="Uniform Resource Locator">URL</acronym></h2>
+    <ul>
+        <li>unique addressing</li>
+        <li>bookmarkable</li>
+        <li>universal</li>
+        <li>inherent namespacing</li>
+        <li>hierarchical</li>
+        <li>permanent</li>
+        <li>opaque vs. human readable? (<acronym title="Uniform Resource Identifier">URI</acronym> design)</li>
+    </ul>
+    <div class="handout">
+        <ul>
+            <li><acronym title="Uniform Resource Identifier">URI</acronym>'s are cheap</li>
+            <li><a href="http://www.w3.org/Provider/Style/URI">Cool <acronym title="Uniform Resource Identifier">URI</acronym>s don't change</a></li>
+        </ul>
+    </div>
+  </li>
+
+  <li class="slide">
+    <h1>Resources vs Representations</h1>
+    <h3>Media-types</h3>
+    <ul class="incremental">
+        <li>Content-Negotiation</li>
+        <li>/format/</li>
+        <li>format=</li>
+        <li>.ext</li>
+        <li>.lang.ext</li>
+    </ul>
+    <div class="handout">
+        Content Negotiation depends on the following headers:
+        <ul>
+            <li><code>Accept</code></li>
+            <li><code>Accept-Language</code></li>
+            <li><code>Accept-Encoding</code></li>
+            <li><code>Vary</code></li>
+        </ul>
+    </div>
+  </li>
+
+  <li class="slide">
+    <h1>Operations</h1>
+    <ul class="incremental">
+        <li class="safe idempotent"><code>HEAD</code></li>
+        <li class="safe idempotent"><code>GET</code></li>
+        <li><code>POST</code></li>
+        <li class="idempotent"><code>PUT</code></li>
+        <li class="idempotent"><code>DELETE</code></li>
+        <li class="safe idempotent"><code>OPTIONS</code></li>
+        <li class="safe idempotent"><code>TRACE</code></li>
+        <li><code>CONNECT</code></li>
+    </ul>
+    <div class="handout">
+        <p>Safe methods should NOT cause any side-effect on the server. Idempotent methods should be repeatable. Any safe method is idempotent but not vice-versa.</p>
+        <p>CRUD (<code>POST</code>, <code>GET</code>, <code>PUT</code>, <code>DELETE</code>)</p>
+        <p>Tunneling <code>PUT</code> and <code>DELETE</code> over <code>POST</code>: use <code>X-METHOD</code> or <code>_method=</code> parameter</p>
+    </div>
+  </li>
+  
+  <li class="slide">
+      <h1>Responses</h1>
+      <ul style="font-size:.5em;">
+          <li><code>100 Continue</code></li>
+          <li><code>201 Created</code> (<code>POST</code>/<code>PUT</code>)</li>
+          <li><code>202 Accepted</code> (<code>POST</code>/<code>PUT</code>)</li>
+          <li><code>404 Not Found</code></li>
+          <li><code>410 Gone</code></li>
+          <li><code>204 No Content</code> (<code>DELETE</code> requests; doesn't change document view)</li>
+          <li><code>205 Reset Content</code></li>
+          <li><code>206 Partial Content</code>
+            <ul>
+                <li><code>Accept-Ranges</code></li>
+                <li><code>416 Requested Range Not Satisfiable</code></li>
+            </ul>
+          </li>
+          <li><code>301 Moved Permanently</code></li>
+          <li><code>302 Found</code></li>
+          <li><code>303 See Other</code> (no repost)</li>
+          <li><code>304 Not Modified</code> (conditionals)</li>
+          <li><code>305 Use Proxy</code></li>
+          <li><code>307 Temporary Redirect</code></li>
+      </ul>
+  </li>
+
+  <li class="slide">
+      <h1>Caching</h1>
+      <ul>
+          <li><code>Expires</code></li>
+          <li><code>Cache-Control</code></li>
+          <li><code>Last-Modified</code>
+            <ul>
+                <li><code>If-Modified-Since</code></li>
+                <li><code>304 Not Modified</code></li>
+            </ul>
+          </li>
+          <li><code>ETag</code>
+            <ul>
+                <li><code>If-None-Match</code></li>
+                <li><code>304 Not Modified</code></li>
+            </ul>
+          </li>
+      </ul>
+  </li>
+
+
+<!-- end presentation -->
+</ol>
+  <img id="background" src="ui/glossdeck/gradient-bg.jpg" alt="" />
+</body>
+</html>
+
