@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<title>s5key</title>
+<style type="text/css">
+body {color:#FFF;background:#131313 url(background-radial.jpg) no-repeat top left;margin:0;padding:0;}
+#launcher {position:absolute;background:#131313 url(launcher.jpg) no-repeat bottom left;height:23px;padding:10px;left:50%;margin-left:-125px;top:0;width:250px;text-align:center;}
+#thiswin {position:absolute;top:60px;left:50%;margin-left:-400px;color:#000;width:400px;height:300px;background-color:#FFF;border:1px solid #555;z-index:5;}
+#nextwin {position:absolute;top:60px;left:50%;margin-left:000px;color:#000;width:400px;height:300px;background-color:#FFF;border:1px solid #555;z-index:5;}
+#mask  {position:absolute;top:60px;left:50%;margin-left:-300px;width:400px;height:300px;position:absolute;background-color:transparent;z-index:10;}
+#notes {position:absolute;top:400px;left:0;margin:0 2%;border:1px solid #666;height:100px;width:96%;overflow:auto;color:#000;background-color:#FFF;font:.8em Arial, Helvetica, sans-serif;}
+#clock {position:absolute;top:0;left:50%;margin-left:-300px;height:2em;width:200px;font:2em Georgia, "Times New Roman", Times, sans-serif;line-height:1;}
+#timer {position:absolute;top:0;left:50%;margin-left:170px;height:40px;width:200px;font:2em Georgia, "Times New Roman", Times, sans-serif;line-height:1;}
+
+</style>
+<script type="text/javascript">
+
+// for padding the dates
+String.prototype.pad = function(length, value)
+{
+  var s = '';
+  if(this.length<length)
+  {
+    for(var i=0;i<(length-this.length);i++) s += value;
+  }
+  return s + this;
+}
+
+var s5key = {
+
+owin:null,
+started:false,
+timerStarted:false,
+
+startTheShow:function()
+{
+  var fpath = document.getElementById('fpath').value;
+  this.owin = window.open(fpath,'owin');
+  frames['thiswin'].location.href = fpath;
+  frames['nextwin'].location.href = fpath;
+  document.getElementById('timer').onclick= function(e){ s5key.toggleTimer(e) };
+  this.started = true;
+},
+
+load:function()
+{
+  if(this.started)
+  {
+    // hooks into the go event of one window to step through the next
+    this._go = frames['thiswin'].go;
+    frames['thiswin'].go = function(step)
+    {
+      if(frames['thiswin'].snum < frames['thiswin'].smax -1 && (frames['thiswin'].snum + step) >= 0)
+      {
+        frames['nextwin'].go(step);
+      }
+      s5key._go(step);
+    }
+
+    this.grabnotes();
+    document.onclick = function(e)
+    {
+      frames['thiswin'].clicker(e);
+
+      s5key.owin.clicker(e);
+      s5key.grabnotes();
+    }
+
+    document.onkeyup = function(e)
+    {
+      frames['thiswin'].keys(e);
+
+      s5key.owin.keys(e);
+      s5key.grabnotes();
+    };
+
+    document.onkeypress = function(e)
+    {
+      frames['thiswin'].trap(e);
+
+      s5key.owin.trap(e);
+      s5key.grabnotes();
+    };
+  }
+},
+
+grabnotes: function()
+{
+  var ss = frames['thiswin'];
+  var slide = ss.GetElementsWithClassName("div","slide")[ss.snum];
+  var notes = document.getElementById('notes');
+  note = 0;
+  for(var i=0;i<slide.childNodes.length;i++)
+  {
+     if(slide.childNodes[i].className == 'handout')
+     {
+        note = i + 1;
+     }
+  }
+  if(note)
+  {
+     notes.innerHTML = slide.childNodes[note-1].innerHTML;
+  }else{
+     notes.innerHTML = '';
+  }
+},
+
+primeNext: function()
+{
+  if(this.started) frames['nextwin'].go(1);
+},
+
+updateTime: function()
+{
+  var clock = document.getElementById("clock");
+
+  var dt = new Date();
+  clock.innerHTML = dt.getHours() + ":" + dt.getMinutes().toString().pad(2,'0') + ":" + dt.getSeconds().toString().pad(2,'0');
+
+  if(this.timerStarted)
+  {
+    var timer = document.getElementById("timer");
+    dt = dt.getTime() - this.timer.getTime();
+    var tm = new Date();
+    tm.setTime(dt);
+
+    timer.innerHTML = tm.getUTCHours() + ":" + tm.getUTCMinutes().toString().pad(2,'0') + ":" + tm.getUTCSeconds().toString().pad(2,'0');
+  }
+},
+
+toggleTimer: function(evt)
+{
+  this.timerStarted = !this.timerStarted;
+  this.timer = new Date();
+  // cancel the event so only the timer is started
+  if(evt)
+  {
+    evt.stopPropagation();
+  }else{
+    window.event.cancelBubble = true;
+  }
+
+}
+
+};
+
+// get the clock started
+setInterval("s5key.updateTime()",1000);
+
+</script>
+
+
+</head>
+<body>
+<div id="mask">&nbsp;</div>
+<div id="launcher"><input type="text" value="index.html" id="fpath"><input type="button" value="launch" onclick="s5key.startTheShow();"></div>
+<iframe id="thiswin" name="thiswin" onload="s5key.load()" src="about:blank"></iframe>
+<iframe id="nextwin" name="nextwin" onload="s5key.primeNext()" src="about:blank"></iframe>
+<div id="notes"></div>
+<div id="clock">0:00:00</div>
+<div id="timer">0:00:00</div>
+
+</body>
+</html>
