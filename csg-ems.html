@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+  <title>CSG - EMS Store</title>
+  <style type="text/css">
+      html {margin:0; padding:0;}
+      body {font-size:80%;}
+      .request, .response {border:1px solid #AAA; padding:1em;}
+      code.body {display:block; border-top:1px solid #AAA;}
+      code, .request, .response {font-family:"Courier New", Courier, monospace; font-size:1em;}
+      .request dt, .request dd, .response dt, .response dd {font-size:.9em;}
+      .request dt, .response dt {vertical-align:baseline; padding-top:.25em; float:left; font-weight:bold; width:10em; line-height:1;}
+      .request dd, .response dd {line-height:1.5; vertical-align:top;}
+  </style>
+</head>
+<body>
+    <h2>Customer Interaction with CSG-EMS Store</h2>
+    <ol>
+        <li>
+            <p>Customer lands at CSG-EMS Store homepage and follows link to the store.</p>
+            <div class="request">
+                <code>GET <a href="http://csg-ems.com/store/products/">http://csg-ems.com/store/products/</a></code>
+                <dl>
+                    <dt>Accept</dt>
+                    <dd>application/xml, text/html;q=.7, */*;q=.1</dd>
+                    <dt>Accept-Charset</dt>
+                    <dd>unicode-1-1, iso-8859-1;q=0.8</dd>
+                </dl>
+            </div>
+            <div class="response">
+                <code>200 OK</code>
+                <dl>
+                    <dt>Last-Modified</dt>
+                    <dd>Mon, 04 Aug 2008 23:11:55 GMT</dd>
+                    <dt>Etag</dt>
+                    <dd>"3f80f-1b6-3e1cb03b"</dd>
+                    <dt>Content-Length</dt>
+                    <dd>438</dd>
+                    <dt>Content-Type</dt>
+                    <dd>text/html; charset=UTF-8</dd>
+                    <dt>Set-Cookie</dt>
+                    <dd>user=123456</dd>
+                </dl>
+                <pre><code class="body">
+&lt;products&gt;
+    &lt;product id="1" href="<a href="http://csg-ems.com/store/products/1/">http://csg-ems.com/store/products/1/</a>"/&gt;
+    &lt;product id="2" href="<a href="http://csg-ems.com/store/products/2/">http://csg-ems.com/store/products/2/</a>"/&gt;
+    &lt;product id="3" href="<a href="http://csg-ems.com/store/products/3/">http://csg-ems.com/store/products/3/</a>"/&gt;
+&lt;/products&gt;
+</code></pre>
+            </div>
+        </li>
+        <li>
+            <p>Customer follows link to specific product.</p>
+            <div class="request">
+                <code>GET <a href="http://csg-ems.com/store/products/1/">http://csg-ems.com/store/products/1/</a></code>
+                <dl>
+                    <dt>Cookie</dt>
+                    <dd>user=123456</dd>
+                </dl>
+            </div>
+            <div class="response">
+                <code>200 OK</code>
+                <pre><code class="body">
+&lt;products cart="<a href="http://csg-ems.com/users/123456/cart/">http://csg-ems.com/users/123456/cart/</a>"&gt;
+    &lt;product id="1" href="<a href="http://csg-ems.com/store/products/1/">http://csg-ems.com/store/products/1/</a>"&gt;
+        &lt;name&gt;Product 1&lt;/name&gt;
+        &lt;description&gt;I am a description for Product 1&lt;/description&gt;
+        &lt;price&gt;$5.00&lt;/price&gt;
+    &lt;/product&gt;
+&lt;/products&gt;
+</code></pre>
+            </div>
+        </li>
+        <li>
+            <p>Customer adds product to cart.</p>
+            <div class="request">
+                <code>PUT <a href="http://csg-ems.com/users/123456/cart/1/">http://csg-ems.com/users/123456/cart/1/</a></code>
+                <pre><code class="body">
+&lt;products&gt;
+    &lt;product id="1" href="<a href="http://csg-ems.com/store/products/1/">http://csg-ems.com/store/products/1/</a>"/&gt;
+&lt;/products&gt;
+</code></pre>
+            </div>
+            <div class="response">
+                <code>201 Created</code>
+                <dl>
+                    <dt>Location</dt>
+                    <dd>http://csg-ems.com/users/123456/cart/1/</dd>
+                </dl>
+            </div>
+        </li>
+        <li>
+            <p>Customer checks out.</p>
+            <div class="request">
+                <code>POST <a href="http://csg-ems.com/store/orders/">http://csg-ems.com/store/orders/</a></code>
+                <dl>
+                    <dt>Cookie</dt>
+                    <dd>user=123456</dd>
+                </dl>
+            </div>
+            <div class="response">
+                <code>412 Precondition Failed</code>
+                <dl>
+                    <dt>Location</dt>
+                    <dd>http://csg-ems.com/forms/newuser/</dd>
+                </dl>
+            </div>
+        </li>
+        <li>
+            <p>Redirected to newuser form</p>
+            <div class="request">
+                <code>GET <a href="http://csg-ems.com/forms/newuser/">http://csg-ems.com/forms/newuser/</a></code>
+            </div>
+            <div class="response">
+                <code>200 OK</code>
+                <pre><code class="body">
+&lt;users&gt;
+    &lt;user&gt;
+        &lt;name/&gt;
+        &lt;email/&gt;
+        &lt;username/&gt;
+        &lt;password/&gt;
+    &lt;/user&gt;
+&lt;/users&gt;
+</code></pre>
+            </div>
+        </li>
+        <li>
+            <p>Submits form</p>
+            <div class="request">
+                <code>PUT <a href="http://csg-ems.com/users/123456/">http://csg-ems.com/users/123456</a></code>
+                <pre><code class="body">
+&lt;users&gt;
+    &lt;user&gt;
+        &lt;name&gt;John Doe&lt;/name&gt;
+        &lt;email&gt;doe@email.com&lt;/email&gt;
+        &lt;username&gt;johndoe&lt;/username&gt;
+        &lt;password&gt;password&lt;/password&gt;
+    &lt;/user&gt;
+&lt;/users&gt;
+</code></pre>
+            </div>
+            <div class="response">
+                <code>201 Created</code>
+                <dl>
+                    <dt>Location</dt>
+                    <dd>http://csg-ems.com/users/123456/</dd>
+                </dl>
+            </div>
+        </li>
+        <li>
+            <p>Customer checks out.</p>
+            <div class="request">
+                <code>POST <a href="http://csg-ems.com/store/orders/">http://csg-ems.com/store/orders/</a></code>
+                <dl>
+                    <dt>Cookie</dt>
+                    <dd>user=123456</dd>
+                </dl>
+            </div>
+            <div class="response">
+                <code>201 Created</code>
+                <dl>
+                    <dt>Location</dt>
+                    <dd>http://csg-ems.com/store/orders/</dd>
+                </dl>
+            </div>
+        </li>
+    </ol>
+</body>
+</html>
